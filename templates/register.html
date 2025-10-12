@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  {% load django_bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <style>
+    #form {
+      width: 600px;
+    }
+
+    .error {
+      position: relative;
+      top: 15px;
+      color: rgb(220, 10, 10);
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'index' %}">ShopCart</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'index' %}"><i class="fa fa-home"></i> Home</a>
+            {% if request.user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#"> <i class="fa fa-user"></i> {{request.user}}</a>
+          </li>
+          <li>
+            <a class="nav-link" aria-current="page" href="{% url 'logout' %}"> <i class="fa fa-home"></i> Logout</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}"><i class="fa fa-sign-in"></i> Login</a>
+          </li>
+          <li>
+            <a class="nav-link" href="{% url 'register' %}"><i class="fa fa-user"></i> Register</a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'collections' %}"><i class="fa fa-cubes"></i> Collections</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'cart' %}"> <i class="fa fa-shopping-cart"></i> Cart</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'fav_view_page' %}"> <i class="fa fa-heart"></i> Favourites</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" style="margin-top: 70px; min-height:500px;">
+    <div class="row">
+      <div class="col-12">
+        <h4 class="mb-3">Register</h4>
+        <hr style="border-color:#b8bfc2;">
+        {% for msg in messages %}
+        <div class="alert alert-info alert-dismissable fade show" role="alert">
+          {{msg}}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <section class="py-4 my-5">
+      <div class="container" id="form">
+        <div class="row">
+          <div class="col-12">
+            <form action="" method="post">
+
+              {% csrf_token %}
+              <div class="mb-4">
+                <label class="form-label">User Name</label>
+                {{form.username}}
+                {% if form.errors.username %}
+                <label class="error">{{form.errors.username}}</label>
+                {% endif %}
+              </div>
+              <div class="mb-4">
+                <label class="form-label">User Email</label>
+                {{form.email}}
+                {% if form.errors.email %}
+                <label class="error">{{form.errors.email}}</label>
+                {% endif %}
+              </div>
+              <div class="mb-4">
+                <label class="form-label">Password</label>
+                {{form.password1}}
+                {% if form.errors.password1 %}
+                <label class="error">{{form.errors.password1}}</label>
+                {% endif %}
+              </div>
+              <div class="mb-4">
+                <label class="form-label">Confirm Password</label>
+                {{form.password2}}
+                {% if form.errors.password2 %}
+                <label class="error">{{form.errors.password2}}</label>
+                {% endif %}
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary form-control">Register</button>
+              </div>
+
+            </form>
+            <p class="my-2 text-center">Already User ? <a href="{% url 'login' %}">Login Now</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+
+
+
+  <footer class="text-center text-lg-start bg-dark text-white">
+    <section class="container d-flex justify-content-center justify-content-lg-between p-4">
+      <div class="me-5 d-none d-lg-block">
+        <span>Get connected with us on social networks:</span>
+      </div>
+      <div>
+        <a href="https://www.facebook.com/" class="me-4 text-reset"><i class="fa fa-facebook"></i></a>
+        <a href="https://www.instagram.com/" class="me-4 text-reset"><i class="fa fa-instagram"></i></a>
+        <a href="https://www.linkedin.com/feed/" class="me-4 text-reset"><i class="fa fa-linkedin"></i></a>
+        <a href="https://github.com/" class="me-4 text-reset"><i class="fa fa-github"></i></a>
+      </div>
+    </section>
+
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <div class="row mt-3">
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <h6 class="text-uppercase fw-bold mb-4"><i class="fa fa-cart-plus"></i>Shopcart</h6>
+            <p>
+              Shopcart.com is a one stop destination for your family's fashion needs.
+              We give you the opportunity to give your wardrope a makeoverwith the latest collections from our top brand
+            </p>
+          </div>
+
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+            <h6 class="text-uppercase fw-bold mb-4">MAKE MONEY WITH US</h6>
+            <p><a href="#!" class="text-reset">sell on shopcart</a></p>
+            <p><a href="#!" class="text-reset">Become an affiliate</a></p>
+            <p><a href="#!" class="text-reset">Join our referral program</a></p>
+            <p><a href="#!" class="text-reset">Partner with us</a></p>
+          </div>
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+            <h6 class="text-uppercase fw-bold mb-4">Useful Links</h6>
+            <p><a href="#!" class="text-reset">FAQ</a></p>
+            <p><a href="#!" class="text-reset">Shipping & Returns</a></p>
+            <p><a href="#!" class="text-reset">Privacy Policy</a></p>
+            <p><a href="#!" class="text-reset">Terms & Conditions</a></p>
+          </div>
+
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+            <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+            <p><i class="fa fa-home"></i> Tirupur</p>
+            <a style="color: white;"
+              href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcRwQMDPvWRhZCldGJDGbKprRmnLRbBGDlKJQBMnjDTvVDtXWnhDVwVdLvRkFQJTLMNZsGkDs">
+              <p><i class="fa fa-envelope"></i> sasi190404@gmail.com</p>
+            </a>
+            <a style="color: white;" href="#">
+              <p><i class="fa fa-phone"></i> +91 9092687022</p>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <div class="text-center p-4">
+      &copy; 2025 Copyright <a href="#" class="text-reset">- sasikumar</a>
+    </div>
+
+  </footer>
+</body>
+
+</html>

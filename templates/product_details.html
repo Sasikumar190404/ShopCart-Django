@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHOP CART | ONLINE</title>
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+
+    {% block css %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% endblock %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}"><i class="fa fa-cart-plus"></i> ShopCart</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}"><i class="fa fa-home"></i> Home</a></li>
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-user"></i> {{ request.user }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Logout</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}"><i class="fa fa-sign-in"></i> Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}"><i class="fa fa-user"></i> Register</a></li>
+                    {% endif %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'collections' %}"><i class="fa fa-cubes"></i> Collections</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'cart' %}"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'fav_view_page' %}"><i class="fa fa-heart"></i> Favourites</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Details Section -->
+    <section class="bg-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <h4 class="mb-3">{{ products.name }} Details</h4>
+                    <hr style="border-color:#b8bfc2;">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'collectionsview' products.category.name %}">Collections</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ products.name }}</li>
+                        </ol>
+                    </nav>
+                    {% for msg in messages %}
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        {{ msg }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Product Image -->
+                <div class="col-md-4 col-12 mb-3 text-center">
+                    {% if products.trending %}
+                    <div class="hot text-center">Hot</div>
+                    {% endif %}
+                    <img src="{{ products.product_image.url }}" class="img-fluid rounded" alt="{{ products.name }}">
+                </div>
+
+                <!-- Product Info -->
+                <div class="col-md-8 col-12 mb-3">
+                    <h5 class="text-success">{{ products.name | upper }}</h5>
+                    <p class="text-muted">{{ products.vendor }}</p>
+                    <p>{{ products.description }}</p>
+                    <h6 class="my-2 text-danger">Current Price: <s>Rs. {{ products.original_price }}</s></h6>
+                    <h5 class="my-2 text-success">Offer Price: Rs. {{ products.selling_price }}</h5>
+
+                    <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2 mt-3">
+                        {% if products.quantity > 0 %}
+                        <input type="hidden" value="{{ products.id }}" id="pid">
+
+                        <div class="input-group" style="width: 150px;">
+                            <button class="input-group-text bg-success text-light" id="btnMinus"><i class="fa fa-minus"></i></button>
+                            <input type="text" name="qty" id="txtQty" value="1" class="form-control text-center">
+                            <button class="input-group-text bg-success text-light" id="btnPlus"><i class="fa fa-plus"></i></button>
+                        </div>
+
+                        <button class="btn btn-primary flex-fill mt-2 mt-sm-0" id="btnCart"><i class="fa fa-shopping-cart"></i> Add to cart</button>
+                        <button class="btn btn-danger flex-fill mt-2 mt-sm-0" id="btnFav"><i class="fa fa-heart"></i></button>
+                        {% else %}
+                        <button class="btn btn-secondary"><i class="fa fa-cart-arrow-down"></i> Out of Stock</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-lg-start bg-dark text-white mt-5">
+        <section class="container d-flex justify-content-center justify-content-lg-between p-4 flex-column flex-lg-row">
+            <div class="me-0 me-lg-5 mb-2 mb-lg-0">
+                <span>Get connected with us on social networks:</span>
+            </div>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="https://www.facebook.com/" class="text-reset"><i class="fa fa-facebook"></i></a>
+                <a href="https://www.instagram.com/" class="text-reset"><i class="fa fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/feed/" class="text-reset"><i class="fa fa-linkedin"></i></a>
+                <a href="https://github.com/" class="text-reset"><i class="fa fa-github"></i></a>
+            </div>
+        </section>
+
+        <section class="container text-center text-md-start mt-4">
+            <div class="row mt-3">
+                <div class="col-md-3 col-lg-4 col-xl-3 mb-4">
+                    <h6 class="text-uppercase fw-bold mb-4"><i class="fa fa-cart-plus"></i> Shopcart</h6>
+                    <p>Shopcart.com is a one stop destination for your family's fashion needs. We give you the opportunity to give your wardrobe a makeover with the latest collections from our top brands.</p>
+                </div>
+
+                <div class="col-md-2 col-lg-2 col-xl-2 mb-4">
+                    <h6 class="text-uppercase fw-bold mb-4">MAKE MONEY WITH US</h6>
+                    <p><a href="#!" class="text-reset">Sell on Shopcart</a></p>
+                    <p><a href="#!" class="text-reset">Become an affiliate</a></p>
+                    <p><a href="#!" class="text-reset">Join referral program</a></p>
+                    <p><a href="#!" class="text-reset">Partner with us</a></p>
+                </div>
+
+                <div class="col-md-3 col-lg-2 col-xl-2 mb-4">
+                    <h6 class="text-uppercase fw-bold mb-4">Useful Links</h6>
+                    <p><a href="#!" class="text-reset">FAQ</a></p>
+                    <p><a href="#!" class="text-reset">Shipping & Returns</a></p>
+                    <p><a href="#!" class="text-reset">Privacy Policy</a></p>
+                    <p><a href="#!" class="text-reset">Terms & Conditions</a></p>
+                </div>
+
+                <div class="col-md-3 col-lg-2 col-xl-2 mb-4">
+                    <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                    <p><i class="fa fa-home"></i> Tirupur</p>
+                    <a style="color: white;" href="mailto:sasi190404@gmail.com"><p><i class="fa fa-envelope"></i> sasi190404@gmail.com</p></a>
+                    <a style="color: white;" href="#"><p><i class="fa fa-phone"></i> +91 9092687022</p></a>
+                </div>
+            </div>
+        </section>
+
+        <div class="text-center p-4">
+            &copy; 2025 Copyright <a href="#" class="text-reset">- Sasikumar</a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+       document.addEventListener("DOMContentLoaded", function () {
+    const btnMinus = document.getElementById('btnMinus');
+    const txtQty = document.getElementById('txtQty');
+    const btnPlus = document.getElementById('btnPlus');
+    const pid = document.getElementById('pid');
+    const btnCart = document.getElementById('btnCart');
+    const btnFav = document.getElementById("btnFav");
+
+    // Helper: Get CSRF token from cookie
+    function getCSRFToken() {
+        let cookieValue = null;
+        const name = "csrftoken";
+        if (document.cookie && document.cookie !== "") {
+            const cookies = document.cookie.split(";");
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + "=")) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    const csrftoken = getCSRFToken();
+
+    // Quantity increment
+    btnPlus?.addEventListener("click", function () {
+        let qty = parseInt(txtQty.value, 10);
+        qty = isNaN(qty) ? 0 : qty;
+        if (qty < 10) txtQty.value = qty + 1;
+    });
+
+    // Quantity decrement
+    btnMinus?.addEventListener("click", function () {
+        let qty = parseInt(txtQty.value, 10);
+        qty = isNaN(qty) ? 0 : qty;
+        if (qty > 1) txtQty.value = qty - 1;
+    });
+
+    // Add to Cart
+    btnCart?.addEventListener("click", function () {
+        let qty = parseInt(txtQty.value, 10);
+        qty = isNaN(qty) ? 0 : qty;
+
+        if (qty > 0) {
+            const formData = new FormData();
+            formData.append("product_qty", qty);
+            formData.append("pid", pid.value);
+
+            fetch("/addtocart/", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "X-CSRFToken": csrftoken
+                },
+                body: formData
+            })
+                .then(response => response.text())
+                .then(data => alert(data))
+                .catch(err => console.error("Error:", err));
+        } else {
+            alert("Please enter a valid quantity");
+        }
+    });
+
+    // Add to Favourite
+    btnFav?.addEventListener("click", function () {
+        const formData = new FormData();
+        formData.append("pid", pid.value);
+
+        fetch("/fav/", {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                "X-CSRFToken": csrftoken
+            },
+            body: formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                if (data.includes("Added")) {
+                    btnFav.classList.add("text-danger");
+                } else if (data.includes("Already")) {
+                    btnFav.classList.add("text-warning");
+                }
+            })
+            .catch(err => console.error("Error:", err));
+    });
+});
+
+    </script>
+
+</body>
+</html>
+    
