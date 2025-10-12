@@ -1,1 +1,1 @@
-web: gunicorn   ShopCart.wsgi
+web: gunicorn ShopCart.wsgi
