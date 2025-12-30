@@ -108,7 +108,9 @@ def cart_page(request):
         cart=Cart.objects.filter(user=request.user)
         return render(request,'cart.html',{"cart":cart})
     else:
-        return redirect('index')
+        messages.error(request,"Login to go to cart")
+        return redirect('login')
+    
     
 def remove_cart(request,cid):
     cartitem=Cart.objects.get(id=cid)

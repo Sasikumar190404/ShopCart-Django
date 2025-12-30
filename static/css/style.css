@@ -41,3 +41,18 @@ a {
 
 
 }
+
+.cards{
+    padding: 20px;
+    box-shadow: 0 0 2px navy;
+    border-radius: 20px;
+}
+
+.cards a{
+    border-radius: 20px;
+    transition-timing-function: ease-in-out;
+}
+
+.cards a:hover{
+    transform: scale(1.1);
+}

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Collections</title>
-  {% load django_bootstrap5 %}
+  {% load bootstrap5 %}
   {% bootstrap_css %}
   {% bootstrap_javascript %}
   {% load static %}
@@ -86,8 +86,8 @@
 
         {% for item in category %}
         <div class="col-md-4 col-lg-3">
-          <div class="card my-3">
-            <img src="{{ item.image.url }}" class="card-image-top" alt="Categories">
+          <div class="card my-3 p-4">
+            <img src="{{ item.image.url }}" class="card-image-top" style="height: 300px;" alt="Categories">
             <hr style="border:solid 1px black">
             <a href="{% url 'collectionsview' item.name %}">
               <div class="card-body">
