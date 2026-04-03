@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SHOP | CART</title>
-    {% load bootstrap5 %}
-    {% bootstrap_css %}
+    {% load django_bootstrap5 %}
     {% bootstrap_javascript %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -56,6 +55,7 @@
         }
 
         @media (max-width: 768px) {
+
             table,
             thead,
             tbody,
@@ -95,8 +95,6 @@
                 height: 60px;
             }
         }
-
-        
     </style>
 </head>
 
@@ -112,17 +110,24 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto text-center">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}"><i class="fa fa-home"></i> Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}"><i class="fa fa-home"></i>
+                            Home</a></li>
                     {% if request.user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link"><i class="fa fa-user"></i> {{request.user}}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Logout</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>
+                            Logout</a></li>
                     {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}"><i class="fa fa-sign-in"></i> Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}"><i class="fa fa-user"></i> Register</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}"><i class="fa fa-sign-in"></i>
+                            Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}"><i class="fa fa-user"></i>
+                            Register</a></li>
                     {% endif %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'collections' %}"><i class="fa fa-cubes"></i> Collections</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'cart' %}"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'fav_view_page' %}"><i class="fa fa-heart"></i> Favourites</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'collections' %}"><i class="fa fa-cubes"></i>
+                            Collections</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'cart' %}"><i class="fa fa-shopping-cart"></i>
+                            Cart</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'fav_view_page' %}"><i
+                                class="fa fa-heart"></i> Favourites</a></li>
                 </ul>
             </div>
         </div>
@@ -147,13 +152,16 @@
                     <tbody>
                         {% for item in cart %}
                         <tr>
-                            <td data-label="Image"><img src="{{item.product.product_image.url}}" class="cart-img" alt="{{item.product.name}}"></td>
+                            <td data-label="Image"><img src="{{item.product.product_image.url}}" class="cart-img"
+                                    alt="{{item.product.name}}"></td>
                             <td data-label="Product Name">{{item.product.name}}</td>
                             <td data-label="Unit Price">Rs {{item.product.selling_price|stringformat:'d'}}</td>
                             <td data-label="Quantity">{{item.product_qty}}</td>
                             <td data-label="Amount" class="amt">Rs {{item.total_cost|stringformat:'d'}}</td>
                             <td data-label="Remove">
-                                <a href="{% url 'remove_cart' item.id %}" onclick="return confirm('Are you sure you want to remove?')" class="btn btn-danger btn-sm btn-remove">
+                                <a href="{% url 'remove_cart' item.id %}"
+                                    onclick="return confirm('Are you sure you want to remove?')"
+                                    class="btn btn-danger btn-sm btn-remove">
                                     <i class="fa fa-trash"></i>
                                 </a>
                             </td>
